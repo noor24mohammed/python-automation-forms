@@ -35,7 +35,8 @@ def run_form(page, name, module, file):
             final_status,
             actual_status,
             screenshot,
-            data
+            data,
+            tc_id
         )
 
 def show_menu():

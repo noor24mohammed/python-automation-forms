@@ -56,22 +56,15 @@ def update_headers(data):
 
 
 # ==============================
-# ✅ GET TC ID
-# ==============================
-def get_next_tc(form_name):
-    return f"{form_name.upper()}_TC_{ws.max_row}"
-
-
-# ==============================
 # ✅ WRITE RESULT
 # ==============================
-def write_result(form_name, website, status, actual_status, screenshot, data):
+def write_result(form_name, website, status, actual_status, screenshot, data, tc_id=None):
     update_headers(data)
 
     row_data = [""] * len(headers)
 
     # Fixed columns
-    row_data[headers.index("Test Case")] = get_next_tc(form_name)
+    row_data[headers.index("Test Case")] = tc_id if tc_id else f"{form_name.upper()}_TC_{ws.max_row}"
     row_data[headers.index("Form Name")] = form_name
     row_data[headers.index("Website")] = website
     row_data[headers.index("Execution Time")] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
