@@ -2,14 +2,15 @@ import json
 from playwright.sync_api import sync_playwright
 from utils.excel_writer import write_result, save
 
-from tests import general, saburi, enquiry, shankara, mrceo
+from tests import general, saburi, enquiry, shankara, mrceo, academy
 
 forms = {
     "1": ("general", general, "data/general.json"),
     "2": ("saburi", saburi, "data/saburi.json"),
     "3": ("enquiry", enquiry, "data/enquiry.json"),
     "4": ("shankara", shankara, "data/shankara.json"),
-    "5": ("mrceo", mrceo, "data/mrceo.json")
+    "5": ("mrceo", mrceo, "data/mrceo.json"),
+    "6": ("academy", academy, "data/academy.json")
 }
 
 
@@ -41,7 +42,8 @@ def show_menu():
     print("3. Enquiry")
     print("4. Shankara")
     print("5. MRCEO")
-    print("6. Run ALL")
+    print("6. Academy")
+    print("7. Run ALL")
     print("=============================\n")
 
 
@@ -53,7 +55,7 @@ if __name__ == "__main__":
         show_menu()
         choice = input("Enter choice: ")
 
-        if choice == "6":
+        if choice == "7":
             for key in forms:
                 name, module, file = forms[key]
                 run_form(page, name, module, file)
