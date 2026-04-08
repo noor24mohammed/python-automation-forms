@@ -1,6 +1,7 @@
 import json
 from playwright.sync_api import sync_playwright
 from utils.excel_writer import write_result, save
+from utils.form_validation import evaluate_test_result
 
 from tests import general, saburi, enquiry, shankara, mrceo, academy
 
@@ -23,14 +24,16 @@ def run_form(page, name, module, file):
 
         print(f"➡ Running {tc_id}")
 
-        status, screenshot, url = module.run(page, data, tc_id)  # ✅ FIX
+        actual_status, screenshot, url = module.run(page, data, tc_id)
+        final_status = evaluate_test_result(actual_status, data.get("expected"))
 
-        print(f"✅ {status}")
+        print(f"✅ Actual: {actual_status} | Expected: {data.get('expected', 'N/A')} → {final_status}")
 
         write_result(
             name,
             url,
-            status,
+            final_status,
+            actual_status,
             screenshot,
             data
         )

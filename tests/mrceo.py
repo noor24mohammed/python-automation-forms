@@ -1,4 +1,5 @@
 import os
+from utils.form_validation import validate_on_page
 
 def run(page, data, tc_id):
     url = "https://mrceo.biz/contact-us/#investment"
@@ -21,49 +22,64 @@ def run(page, data, tc_id):
         email_input.wait_for(timeout=15000)
 
         # ==============================
-        # ✅ GET ALL VISIBLE INPUTS
+        # ✅ FILL FORM (FIELD-SPECIFIC)
         # ==============================
-        inputs = page.locator("input:visible")
-        textareas = page.locator("textarea:visible")
+        # Using specific field names instead of index positions
+        
+        # Full Name
+        page.fill("input[placeholder*='full name' i], input[name*='fullname' i], input[name*='full_name' i]", data["fullname"])
+        page.wait_for_timeout(2000)
 
-        print("Visible inputs:", inputs.count())
+        # Mobile Number
+        page.fill("input[type='tel'], input[placeholder*='mobile' i], input[name*='mobile' i]", data["mobile"])
+        page.wait_for_timeout(2000)
 
-        # ==============================
-        # ✅ FILL FORM (INDEX SAFE)
-        # ==============================
-        inputs.nth(0).fill(data["fullname"])      # Name
-        page.wait_for_timeout(3000)
-        inputs.nth(1).fill(data["email"])         # Email
-        page.wait_for_timeout(3000)
-        inputs.nth(2).fill(data["mobile"])        # Phone
-        page.wait_for_timeout(3000)
-        inputs.nth(3).fill(data["linkedin"])      # LinkedIn
-        page.wait_for_timeout(3000)
-        inputs.nth(4).fill(data["business_name"]) # Business Name
-        page.wait_for_timeout(3000)
-        inputs.nth(5).fill(data["city"])          # City
-        page.wait_for_timeout(3000)
-        inputs.nth(6).fill(data["business_email"])# Business Email
-        page.wait_for_timeout(3000)
-        inputs.nth(7).fill(data["website"])       # Website
-        page.wait_for_timeout(3000)
-        inputs.nth(8).fill(data["social_profile"])# Social
-        page.wait_for_timeout(3000)
+        # Email
+        page.fill("input[type='email']:visible", data["email"])
+        page.wait_for_timeout(2000)
+
+        # LinkedIn Profile
+        page.fill("input[placeholder*='linkedin' i], input[name*='linkedin' i]", data["linkedin"])
+        page.wait_for_timeout(2000)
+
+        # Business Name
+        page.fill("input[placeholder*='business' i], input[name*='business_name' i]", data["business_name"])
+        page.wait_for_timeout(2000)
+
+        # City
+        page.fill("input[placeholder*='city' i], input[name*='city' i]", data["city"])
+        page.wait_for_timeout(2000)
+
+        # Business Email
+        page.fill("input[placeholder*='business email' i], input[name*='business_email' i]", data["business_email"])
+        page.wait_for_timeout(2000)
+
+        # Website
+        page.fill("input[placeholder*='website' i], input[name*='website' i]", data["website"])
+        page.wait_for_timeout(2000)
+
+        # Social Profile
+        page.fill("input[placeholder*='social' i], input[name*='social' i]", data["social_profile"])
+        page.wait_for_timeout(2000)
 
         # Optional fields
-        try:
-            inputs.nth(9).fill(data["industry"])
-        except:
-            pass
+        if data.get("industry"):
+            try:
+                page.fill("input[placeholder*='industry' i], input[name*='industry' i]", data["industry"])
+            except:
+                pass
+            page.wait_for_timeout(1000)
 
-        try:
-            inputs.nth(10).fill(data["stage"])
-        except:
-            pass
+        if data.get("stage"):
+            try:
+                page.fill("input[placeholder*='stage' i], input[name*='stage' i]", data["stage"])
+            except:
+                pass
+            page.wait_for_timeout(1000)
 
-        # Textarea
-        textareas.first.fill(data["challenge"])
-        page.wait_for_timeout(3000)
+        # Textarea - Challenge/Message
+        page.fill("textarea", data["challenge"])
+        page.wait_for_timeout(2000)
 
         # ==============================
         # ✅ CHECKBOX (SAFE)
@@ -79,18 +95,7 @@ def run(page, data, tc_id):
 
         page.wait_for_timeout(5000)
 
-        # ==============================
-        # ✅ VALIDATION (FORCE PASS IF FILLED)
-        # ==============================
-        # Real validation may vary, so safe fallback:
-        if page.locator("text=Thank").count() > 0:
-            status = "PASS"
-        else:
-            # 🔥 fallback → if no error visible → PASS
-            if page.locator("text=error").count() == 0:
-                status = "PASS"
-            else:
-                status = "FAIL"
+        status = validate_on_page(page)
 
         # ==============================
         # ✅ SCREENSHOT

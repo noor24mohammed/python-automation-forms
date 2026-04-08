@@ -65,6 +65,7 @@
 #         return "FAIL", screenshot, url
 
 import os
+from utils.form_validation import validate_on_page
 
 def run(page, data, tc_id):
     url = "https://terralogic.academy/"
@@ -120,13 +121,11 @@ def run(page, data, tc_id):
         # =========================
         # Validation check
         # =========================
-        errors = page.locator("input:invalid, textarea:invalid").count()
+        status = validate_on_page(page)
 
-        if errors > 0:
-            status = "FAIL"
+        if status == "FAIL":
             print(f"❌ {tc_id} → Validation errors found")
         else:
-            status = "PASS"
             print(f"✅ {tc_id} → Form submitted")
 
         # =========================

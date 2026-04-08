@@ -1,4 +1,5 @@
 import os
+from utils.form_validation import validate_on_page
 
 def run(page, data, tc_id):
     url = "https://shankarbaba.org/contact-us/"
@@ -23,11 +24,13 @@ def run(page, data, tc_id):
         page.wait_for_timeout(5000)
         # page.click("input[type='submit']")
 
+        status = validate_on_page(page)
+
         os.makedirs("screenshots", exist_ok=True)
         screenshot = "screenshots/shankara.png"
         page.screenshot(path=screenshot)
 
-        return "PASS", screenshot, url
+        return status, screenshot, url
 
     except Exception as e:
         print("❌ Shankara ERROR:", e)

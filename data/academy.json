@@ -6,5 +6,13 @@
         "query": "I want to enroll in UI/UX course",
         "course": "Development",
         "expected": "PASS"
+    },
+    {
+        "name": "Noor",
+        "phone": "9876543210",
+        "email": "test@gmail.com",
+        "query": "I want to enroll in UI/UX course",
+        "course": "UI/UX",
+        "expected": "PASS"
     }
     ]

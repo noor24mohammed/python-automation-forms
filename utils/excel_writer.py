@@ -16,6 +16,10 @@ if os.path.exists(file_name):
     wb = load_workbook(file_name)
     ws = wb.active
     headers = [cell.value for cell in ws[1]]
+
+    if "Actual" not in headers:
+        headers.append("Actual")
+        ws.cell(row=1, column=len(headers)).value = "Actual"
 else:
     wb = Workbook()
     ws = wb.active
@@ -27,6 +31,7 @@ else:
         "Website",
         "Execution Time",
         "Status",
+        "Actual",
         "Screenshot"
     ]
 
@@ -60,7 +65,7 @@ def get_next_tc(form_name):
 # ==============================
 # ✅ WRITE RESULT
 # ==============================
-def write_result(form_name, website, status, screenshot, data):
+def write_result(form_name, website, status, actual_status, screenshot, data):
     update_headers(data)
 
     row_data = [""] * len(headers)
@@ -71,6 +76,7 @@ def write_result(form_name, website, status, screenshot, data):
     row_data[headers.index("Website")] = website
     row_data[headers.index("Execution Time")] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     row_data[headers.index("Status")] = status
+    row_data[headers.index("Actual")] = actual_status
     row_data[headers.index("Screenshot")] = screenshot
 
     # Dynamic JSON fields

@@ -1,4 +1,5 @@
 import os
+from utils.form_validation import validate_on_page
 
 def run(page, data, tc_id):
     try:
@@ -18,14 +19,14 @@ def run(page, data, tc_id):
         page.wait_for_timeout(5000)
         # page.click("input[type='submit']")
 
+        status = validate_on_page(page)
 
-        # Screenshot folder
         os.makedirs("screenshots", exist_ok=True)
         screenshot_path = f"screenshots/{tc_id}_general.png"
 
         page.screenshot(path=screenshot_path)
 
-        return "PASS", screenshot_path, url
+        return status, screenshot_path, url
 
     except Exception as e:
         print("❌ ERROR:", e)
